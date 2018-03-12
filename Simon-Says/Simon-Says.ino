@@ -21,8 +21,9 @@
 void setup() {
   Serial.begin(9600);
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
-}
+  
 
+}
 
 
 void flashQuad1(){
@@ -65,6 +66,16 @@ void flashQuad4(){
 
 
 void loop() {
+  
+    //Setup the answerSheet so that it has the right number of slots (Rounds)
+     // and sets all the values to 0*/
+   int answerSheet[Rounds];
+
+   for(int k =0; k <= Rounds; k++)
+   {
+    answerSheet[k] = 0;
+   }
+
 
   if(Rounds < RoundLength)
   {
@@ -74,7 +85,7 @@ void loop() {
       Serial.print(Rounds);
       Serial.println(" |-------------");
       
-         for(int i=1; i<= Rounds; i++)
+         for(int i=0; i< Rounds; i++)
          {
               
              randomNumber = random(1,5);                //pick a random number (between 1-4)
@@ -87,18 +98,22 @@ void loop() {
              {
               case 1:
                     flashQuad1();
+                    answerSheet[i] = 1;       
                     break;
             
                case 2:
                     flashQuad2();
+                    answerSheet[i] = 2;
                     break;
             
                 case 3:
                     flashQuad3();
+                    answerSheet[i] = 3;
                     break;
             
                 case 4:
                    flashQuad4();
+                   answerSheet[i] =4;
                    break;
             
                 default:
@@ -113,7 +128,13 @@ void loop() {
          
   
       }
-  
+      Serial.print("The Answer Sheet is... ");
+      for( int j=0; j < Rounds; j++)
+      {
+      Serial.print(answerSheet[j]);
+      Serial.print(" , ");
+      }
+      Serial.println();
     }
   }
   else
