@@ -15,11 +15,13 @@
   int Rounds = 1;          //the Round you are on 
 
   static uint8_t hue=0;   //for the rainbow fill effect
+  int inputTime = 5000;     //amount of time the player has to 
 
    
 
 void setup() {
   Serial.begin(9600);
+  Serial.setTimeout(inputTime);
   FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
   
 
@@ -64,20 +66,26 @@ void flashQuad4(){
 }
 
 
+ 
+  
+
+
 
 void loop() {
-  
-    //Setup the answerSheet so that it has the right number of slots (Rounds)
-     // and sets all the values to 0*/
-   int answerSheet[Rounds];
 
-   for(int k =0; k <= Rounds; k++)
+
+  
+   
+   int answerSheet[Rounds];               //sets up the answer sheet so that it has the right number 
+                                          //of slots (Rounds)
+    for(int k =0; k <= Rounds; k++)       //and sets all of the values in answerSheet to 0
    {
     answerSheet[k] = 0;
    }
+  
 
 
-  if(Rounds < RoundLength)
+  if(Rounds < RoundLength)                              //beginning of a new round
   {
     for(Rounds=1; Rounds<=RoundLength; Rounds++)
     {
@@ -85,7 +93,7 @@ void loop() {
       Serial.print(Rounds);
       Serial.println(" |-------------");
       
-         for(int i=0; i< Rounds; i++)
+         for(int i=0; i< Rounds; i++)                    //beginning of a new quadrant to be picked
          {
               
              randomNumber = random(1,5);                //pick a random number (between 1-4)
@@ -93,49 +101,81 @@ void loop() {
              Serial.print(randomNumber);
             
               
-            
-             switch (randomNumber)
+                                    
+             switch (randomNumber)                        //use the random number to pick a quadrant to flash
              {
               case 1:
-                    flashQuad1();
-                    answerSheet[i] = 1;       
-                    break;
+                    flashQuad1();                         //light up the quadrant
+                    answerSheet[i] = 1;                   //log this quadrant on the answer sheet
+                    break;                                //get the hell out of dodge
             
                case 2:
-                    flashQuad2();
+                    flashQuad2();                        //...same thing, just for quad2...
                     answerSheet[i] = 2;
                     break;
             
                 case 3:
-                    flashQuad3();
+                    flashQuad3();                       //...and quad3...
                     answerSheet[i] = 3;
                     break;
             
                 case 4:
-                   flashQuad4();
+                   flashQuad4();                        //this one is totally different in that it's not
                    answerSheet[i] =4;
                    break;
             
                 default:
-                  Serial.print("Nothing happened???");
-                  break;      
+                  Serial.print("Nothing happened???");  //I think technically 5 is a valid random number. 
+                  break;                                //this is a 'just in case' measure
              }
             
-                FastLED.show();       //usually to let all the LEDs go dark
-                delay(pauseLength);          
+                FastLED.show();                         //usually to let all the LEDs go dark
+                delay(pauseLength);                     //give it a moment so the player knows there's a new entry
         
           
          
   
       }
-      Serial.print("The Answer Sheet is... ");
+      
+      /*This is me checking to see what the answer key is.
+        It's messy and not in a function because I'm not 
+        super comfortable with passing stuff in functions/Return*/
+      Serial.print("The Answer Sheet is... ");            
       for( int j=0; j < Rounds; j++)
       {
       Serial.print(answerSheet[j]);
       Serial.print(" , ");
       }
       Serial.println();
+      Serial.println();
+
+
+      /*This is to read the player's response.  
+        I really should get on the whole Returns thing.
+        This all should be a function*/
+        
+      Serial.println("What was the pattern?");
+      
+      while(!Serial.available())
+      {
+        //hang out and no nothing until the user starts booping stuff
+      }
+      while(Serial.available())
+      {
+          int playerAnswer = Serial.read(); 
+                         
+        //delay(inputTime);                     //gives the user some time to answer the question
+        
+        Serial.print("playerAnswer = ");
+        Serial.println(playerAnswer);
+        Serial.println();
+        Serial.println();
+      } 
     }
+
+
+
+    
   }
   else
   {
