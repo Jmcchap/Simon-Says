@@ -15,14 +15,14 @@
   int Rounds = 1;          //the Round you are on 
 
   static uint8_t hue=0;   //for the rainbow fill effect
-  int inputTime = 5000;     //amount of time the player has to 
+  int inputTime = 5000;     //amount of time the player has to answer Simon
 
    
 
 void setup() {
   Serial.begin(9600);
   Serial.setTimeout(inputTime);
-  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);
+  FastLED.addLeds<NEOPIXEL, DATA_PIN>(leds, NUM_LEDS);     
   
 
 }
@@ -73,15 +73,26 @@ void flashQuad4(){
 
 void loop() {
 
-
-  
-   
    int answerSheet[Rounds];               //sets up the answer sheet so that it has the right number 
                                           //of slots (Rounds)
-    for(int k =0; k <= Rounds; k++)       //and sets all of the values in answerSheet to 0
-   {
-    answerSheet[k] = 0;
-   }
+//    for(int k =0; k <= Rounds; k++)       //and sets all of the values in answerSheet to 0
+//   {
+//    answerSheet[k] = 0;
+//   }
+
+
+/* PRINTS ALL THE ANSWERS FROM THE LAST ROUND */
+/*--------------------------------------------*/
+   memset(answerSheet, 0, sizeof(answerSheet));     
+   Serial.print("The Answer Sheet is... ");            
+      for( int j=0; j < 5; j++)
+      {
+      Serial.print(answerSheet[j]);
+      Serial.print(" , ");
+      }
+      Serial.println();
+      Serial.println();
+   
   
 
 
