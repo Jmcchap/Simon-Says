@@ -11,8 +11,8 @@
   int randomNumber = 0;    //to decide which quad gets lit
   int flashlength = 1500;  //number of seconds for the quadrant to stay lit
   int pauseLength = 4000; //the number of milliseconds to wait between flashes
-  int RoundLength = 5;    //number of rounds before you win the game
-  int Rounds = 1;          //the Round you are on 
+  int gameLength = 5;    //number of Round before you win the game
+  int Round = 1;          //the Round you are on 
 
   static uint8_t hue=0;   //for the rainbow fill effect
   int inputTime = 5000;     //amount of time the player has to answer Simon
@@ -73,15 +73,12 @@ void flashQuad4(){
 
 void loop() {
 
-   int answerSheet[Rounds];               //sets up the answer sheet so that it has the right number 
-                                          //of slots (Rounds)
-//    for(int k =0; k <= Rounds; k++)       //and sets all of the values in answerSheet to 0
-//   {
-//    answerSheet[k] = 0;
-//   }
+   int answerSheet[Round];               //sets up the answer sheet so that it has the right number 
+                                          //of slots (Round)
 
 
-/* PRINTS ALL THE ANSWERS FROM THE LAST ROUND */
+
+/* SETS EVERYTHING TO ZERO */
 /*--------------------------------------------*/
    memset(answerSheet, 0, sizeof(answerSheet));     
    Serial.print("The Answer Sheet is... ");            
@@ -96,15 +93,15 @@ void loop() {
   
 
 
-  if(Rounds < RoundLength)                              //beginning of a new round
+  if(Round < gameLength)                              //beginning of a new round
   {
-    for(Rounds=1; Rounds<=RoundLength; Rounds++)
+    for(Round=1; Round<=gameLength; Round++)
     {
       Serial.print("-------------| ROUND ");  
-      Serial.print(Rounds);
+      Serial.print(Round);
       Serial.println(" |-------------");
       
-         for(int i=0; i< Rounds; i++)                    //beginning of a new quadrant to be picked
+         for(int i=0; i< Round; i++)                    //beginning of a new quadrant to be picked
          {
               
              randomNumber = random(1,5);                //pick a random number (between 1-4)
@@ -152,7 +149,7 @@ void loop() {
         It's messy and not in a function because I'm not 
         super comfortable with passing stuff in functions/Return*/
       Serial.print("The Answer Sheet is... ");            
-      for( int j=0; j < Rounds; j++)
+      for( int j=0; j < Round; j++)
       {
       Serial.print(answerSheet[j]);
       Serial.print(" , ");
